@@ -1,24 +1,69 @@
 //Напишите функцию, которая проверяет, является ли число целым используя побитовые операторы
-function isInteger(n) {}
+function isInteger(n) {
+    return (n | 0) === n;
+}
 
 //Напишите функцию, которая возвращает массив четных чисел от 2 до 20 включительно
-function even() {}
+function even() {
+    const arr = [];
+    for (let i = 2; i < 21; i++) {
+        if (i % 2 == 0) {
+            arr.push(i);
+        }
+    }
+    return arr;
+}
 
 //Напишите функцию, считающую сумму чисел до заданного используя цикл
-function sumTo(n) {}
+function sumTo(n) {
+    let summ = 0;
+    while (n != 0) {
+        summ += n;
+        n -= 1;
+    }
+    return summ;
+}
 
 //Напишите функцию, считающую сумму чисел до заданного используя рекурсию
-function recSumTo(n) {}
+function recSumTo(n) {
+    if (n == 1) {
+        return 1;
+    }
+    return n + recSumTo(n - 1);
+}
 
 //Напишите функцию, считающую факториал заданного числа
-function factorial(n) {}
+function factorial(n) {
+    if (n < 0) {
+        return 'Error, n - number cant be negative';
+    }
+    if (n == 0) {
+        return 1;
+    }
+    let result = 1;
+    while (n != 1) {
+        result *= n;
+        n -= 1;
+    }
+    return result;
+}
 
 //Напишите функцию, которая определяет, является ли число двойкой, возведенной в степень
-function isBinary(n) {}
+function isBinary(n) {
+    if (n <= 0) {
+        return false;
+    }
+    return (n & (n - 1)) === 0;
+}
 
 //Напишите функцию, которая находит N-е число Фибоначчи
-function fibonacci(n) {}
-
+function fibonacci(n) {
+    if (n <= 1) {
+        return n;
+    } else {
+        return fibonacci(n - 1) + fibonacci(n - 2);
+    }
+}
 /** Напишите функцию, которая принимает начальное значение и функцию операции
  * и возвращает функцию - выполняющую эту операцию.
  * Если функция операции (operatorFn) не задана - по умолчанию всегда
@@ -30,7 +75,17 @@ function fibonacci(n) {}
  * console.log(sumFn(5)) - 15
  * console.log(sumFn(3)) - 18
  */
-function getOperationFn(initialValue, operatorFn) {}
+function getOperationFn(initialValue, operatorFn) {
+    let storedValue = initialValue;
+    return function (newValue) {
+        if (operatorFn) {
+            storedValue = operatorFn(storedValue, newValue);
+        } else {
+            storedValue = initialValue;
+        }
+        return storedValue;
+    };
+}
 
 /**
  * Напишите функцию создания генератора арифметической последовательности.
@@ -48,8 +103,16 @@ function getOperationFn(initialValue, operatorFn) {}
  * console.log(generator()); // 7
  * console.log(generator()); // 9
  */
-function sequence(start, step) {}
+function sequence(start = 0, step = 1) {
+    let current = start;
+    function generator() {
+        const value = current;
+        current += step;
+        return value;
+    }
 
+    return generator;
+}
 /**
  * Напишите функцию deepEqual, которая принимает два значения
  * и возвращает true только в том случае, если они имеют одинаковое значение
@@ -64,7 +127,42 @@ function sequence(start, step) {}
  * deepEqual({arr: [22, 33], text: 'text'}, {arr: [22, 33], text: 'text'}) // true
  * deepEqual({arr: [22, 33], text: 'text'}, {arr: [22, 3], text: 'text2'}) // false
  */
-function deepEqual(firstObject, secondObject) {}
+function deepEqual(firstObject, secondObject) {
+    if (firstObject !== firstObject && secondObject !== secondObject) {
+        return true; // Оба значения - NaN
+    }
+
+    if (firstObject === secondObject) {
+        return true;
+    }
+
+    if (
+        firstObject === null ||
+        typeof firstObject !== 'object' ||
+        secondObject === null ||
+        typeof secondObject !== 'object'
+    ) {
+        return false;
+    }
+
+    const keysFirst = Object.keys(firstObject);
+    const keysSecond = Object.keys(secondObject);
+
+    if (keysFirst.length !== keysSecond.length) {
+        return false;
+    }
+
+    for (let key of keysFirst) {
+        if (
+            !keysSecond.includes(key) ||
+            !deepEqual(firstObject[key], secondObject[key])
+        ) {
+            return false;
+        }
+    }
+
+    return true;
+}
 
 module.exports = {
     isInteger,
